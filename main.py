@@ -276,10 +276,10 @@ def plot_pr_curve(
 
 if __name__ == "__main__":
 
-    with open('data3.json') as infile:     # ground_truth_boxes.json
+    with open('data.json') as infile:     # ground_truth_boxes.json
         gt_boxes = json.load(infile)
 
-    with open('resultTest2.json') as infile:        # predicted_boxes.json
+    with open('resultFromModel.json') as infile:        # predicted_boxes.json
         pred_boxes = json.load(infile)
 
     # Runs it for one IoU threshold
