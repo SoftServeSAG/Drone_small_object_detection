@@ -58,7 +58,7 @@ if __name__ == '__main__':
         index = 0
         for row in readCSV:
             index += 1
-            if index < 1291:
+            if index < 0:
                 continue
             data = row[3]
             if len(data) < 40:
