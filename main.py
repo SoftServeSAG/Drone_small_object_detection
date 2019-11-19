@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 from copy import deepcopy
+import sys
 import json
 import time
 
@@ -275,11 +276,14 @@ def plot_pr_curve(
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Please enter path to file data and output results data from model")
+        exit(1)
 
-    with open('small_data.json') as infile:     # ground_truth_boxes.json # data.json
+    with open(sys.argv[1]) as infile:     # ground_truth_boxes.json # data.json
         gt_boxes = json.load(infile)
 
-    with open('small_data_result.json') as infile:        # predicted_boxes.json #resultFromModel.json
+    with open(sys.argv[2]) as infile:        # predicted_boxes.json #resultFromModel.json
         pred_boxes = json.load(infile)
 
     # Runs it for one IoU threshold
