@@ -49,3 +49,12 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+
+logs/
+*.hdf5
+dataset/
+__pycache__/
+*.jpg
+*.json
+*.png
+.idea/
