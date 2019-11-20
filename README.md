@@ -18,4 +18,4 @@ To run splitObjects.py you must add some arguments. Sample :
 
 python splitObjects.py "small rate split number" "large rate split number" "path to test annotation data file" "path to model output results file" "path to train images" 
 
-Script generate 6 json files which you can use in main.py scripts to calculate mAP metrix. 
+Script generate 6 json files which you can use in main.py script to calculate mAP metrix. 
