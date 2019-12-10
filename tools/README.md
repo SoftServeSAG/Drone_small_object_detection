@@ -1,6 +1,6 @@
 # Tools
 
-1. OpenVino_result.py - script to get bounding boxes and scores from OpenVino model and save this metrix to json file.
+1. **OpenVino_result.py** - script to get bounding boxes and scores from OpenVino model and save this metrix to json file.
 
 	Options:  
 	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -h, --help            Show this help message and exit.  
@@ -23,4 +23,20 @@
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  --labels LABELS       Optional. Path to labels mapping file  
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  -pt PROB_THRESHOLD, --prob_threshold PROB_THRESHOLD  
 		              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Optional. Probability threshold for detections  
-		              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  filtering  
+		              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  filtering 
+			      
+2. **augmentation_config.py** - augmentation configuration file for using with [albumentation](https://github.com/albumentations-team/albumentations)
+
+Example of using: 
+
+```python
+aug = Compose(/* different augmentations */)
+augmented = aug(image=image, mask=mask)
+```
+3. **augmentation_config.py** - Python script for dividing overall dataset into 2 parts (**TRAIN, VALIDATION**). 
+
+INPUT: folder with `'MASKS', 'FRAMES', 'JSONS'` subfolders
+
+OUTPUT: created subfolders `'train_frames', 'train_masks', 'train_json', 'val_frames', 'val_masks', 'val_json'`
+
+
