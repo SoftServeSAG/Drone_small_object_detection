@@ -11,10 +11,25 @@ from pycocotools import mask
 from skimage import measure
 from pycocotools import coco
 import urllib.request
+from argparse import ArgumentParser, SUPPRESS
+
+
+def build_argparser():
+    parser = ArgumentParser(add_help=False)
+    args = parser.add_argument_group("Options")
+    args.add_argument('-h', '--help', action='help', default=SUPPRESS, help='Show this help message and exit.')
+    args.add_argument("-f", "--folder", help="Required. Path to folder where will save masks.",
+                      required=True, type=str)
+    args.add_argument("-i", "--input", help="Required. Path to csv annotation file.",
+                      required=True, type=str, nargs="+")
+
+    return parser
+
 
 def bounding_box(points):
     x_coordinates, y_coordinates = zip(*points)
     return [int(min(x_coordinates)), int(min(y_coordinates)), int(max(x_coordinates)), int(max(y_coordinates))]
+
 
 def new_mask_annotation(path_to_mask):
     path_to_masks = glob.glob(os.path.join(path_to_mask, '*.png'))
@@ -26,7 +41,6 @@ def new_mask_annotation(path_to_mask):
         fortran_ground_truth_binary_mask = np.asfortranarray(ground_truth_binary_mask)
         encoded_ground_truth = mask.encode(fortran_ground_truth_binary_mask)
         ground_truth_area = mask.area(encoded_ground_truth)
-        ground_truth_bounding_box = mask.toBbox(encoded_ground_truth)
         contours = measure.find_contours(ground_truth_binary_mask, 0.5)
 
         bboxes = []
@@ -49,29 +63,35 @@ def new_mask_annotation(path_to_mask):
             segmentation = contour.ravel().tolist()
             annotation['segmentation'].append(segmentation)
 
-            with open('RosbagJson/{}.json'.format(image_name), 'w') as my_file:
+            with open('{}/{}.json'.format(path_to_mask ,image_name), 'w') as my_file:
                 json.dump(annotation, my_file)
 
+
 if __name__ == '__main__':
-    with open('rosbag2.csv') as csvfile:
+    min_data_len = 40
+    args = build_argparser().parse_args()
+
+    with open(args.input[0]) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         index = 0
         for row in readCSV:
             index += 1
-            if index < 0:
-                continue
             data = row[3]
-            if len(data) < 40:
+            if len(data) < min_data_len:
                 continue
             data = json.loads(data)
-            link = data["objects"][0]["instanceURI"]
-            print(link)
-            mask_name = row[9].split('.')[0]
-            opener = urllib.request.build_opener()
-            opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-            urllib.request.install_opener(opener)
-            urllib.request.urlretrieve(link, "RosbagMask2/{}.png".format(mask_name))
-            print(index)
-            
-    new_mask_annotation("RosbagMask2/")
+            for it in range(len(data["objects"])):
+                link = data["objects"][it]["instanceURI"]
+                print(link)
+                mask_name = row[9].split('.')[0]
+                opener = urllib.request.build_opener()
+                if os.path.isfile("{}/{}".format(args.folder, mask_name)):
+                    pass
+                else:
+                    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+                    urllib.request.install_opener(opener)
+                    urllib.request.urlretrieve(link, "{}/{}.png".format(args.folder, mask_name))
+                print(index)
+                
+    new_mask_annotation(args.folder)
 
