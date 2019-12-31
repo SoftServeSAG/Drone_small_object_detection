@@ -3,9 +3,26 @@ import json
 import sys
 import math
 import cv2
+from argparse import ArgumentParser, SUPPRESS
 
 
-def data_split(min_threshold, max_threshold, path_to_file):
+def build_argparser():
+    parser = ArgumentParser(add_help=False)
+    args = parser.add_argument_group("Options")
+    args.add_argument('-h', '--help', action='help', default=SUPPRESS, help='Show this help message and exit.')
+    args.add_argument('-s', '--small', action='Small object rate.', default=1.5)
+    args.add_argument('-l', '--large', action='Large object rate.', default=20)
+    args.add_argument("-a", "--annotation", help="Required. Path to data annotation file.",
+                      required=True, type=str)
+    args.add_argument("-f", "--folder", help="Required. Path to model output data file.",
+                      required=True, type=str)
+    args.add_argument("-i", "--images", help="Required. Path to images.",
+                      required=True, type=str, nargs="+")
+
+    return parser
+
+
+def data_split(min_threshold, max_threshold, path_to_file, path_to_images):
     min_data_objects = dict()
     middle_data_objects = dict()
     max_data_objects = dict()
@@ -17,7 +34,7 @@ def data_split(min_threshold, max_threshold, path_to_file):
                 height = math.sqrt(((bbox[0] - bbox[0]) ** 2) + ((bbox[1] - bbox[3]) ** 2))
                 width = math.sqrt(((bbox[0] - bbox[2]) ** 2) + ((bbox[1] - bbox[1]) ** 2))
                 area = height * width
-                img = cv2.imread(sys.argv[5] + key)
+                img = cv2.imread(path_to_images + key)
                 img_area = img.shape[0] * img.shape[1]
                 rate = (area * 100) / img_area
                 if rate <= min_threshold:
@@ -51,10 +68,12 @@ def split_result_data(data, path_to_file):
 
 
 def main():
-    small_data, middle_data, large_data = data_split(float(sys.argv[1]), float(sys.argv[2]), sys.argv[3])
-    small_data_result = split_result_data(small_data, sys.argv[4])
-    middle_data_result = split_result_data(middle_data, sys.argv[4])
-    large_data_result = split_result_data(large_data, sys.argv[4])
+    args = build_argparser().parse_args()
+    small_data, middle_data, large_data = data_split(float(args.small), float(args.large), args.annotation,
+                                                     args.images)
+    small_data_result = split_result_data(small_data, args.folder)
+    middle_data_result = split_result_data(middle_data, args.folder)
+    large_data_result = split_result_data(large_data, args.folder)
 
     with open("small_data.json", "w") as outfile:
         json.dump(small_data, outfile)
@@ -71,7 +90,4 @@ def main():
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 6:
-        print("Enter small rate, large rate, path to data file, path to model output file, path to images")
-        exit(1)
     main()
