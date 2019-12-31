@@ -10,14 +10,14 @@ def build_argparser():
     parser = ArgumentParser(add_help=False)
     args = parser.add_argument_group("Options")
     args.add_argument('-h', '--help', action='help', default=SUPPRESS, help='Show this help message and exit.')
-    args.add_argument('-s', '--small', action='Small object rate.', default=1.5)
-    args.add_argument('-l', '--large', action='Large object rate.', default=20)
+    args.add_argument('-s', '--small', action='Small object rate.', default=1.5, type=float)
+    args.add_argument('-l', '--large', action='Large object rate.', default=20, type=float)
     args.add_argument("-a", "--annotation", help="Required. Path to data annotation file.",
                       required=True, type=str)
     args.add_argument("-f", "--folder", help="Required. Path to model output data file.",
                       required=True, type=str)
     args.add_argument("-i", "--images", help="Required. Path to images.",
-                      required=True, type=str, nargs="+")
+                      required=True, type=str)
 
     return parser
 

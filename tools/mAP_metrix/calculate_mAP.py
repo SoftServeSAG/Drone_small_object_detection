@@ -8,6 +8,20 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from argparse import ArgumentParser, SUPPRESS
+
+
+def build_argparser():
+    parser = ArgumentParser(add_help=False)
+    args = parser.add_argument_group("Options")
+    args.add_argument('-h', '--help', action='help', default=SUPPRESS, help='Show this help message and exit.')
+    args.add_argument("-a", "--annotation", help="Required. Path to annotation data file.",
+                      required=True, type=str)
+    args.add_argument("-i", "--input", help="Required. Path to model output result file.",
+                      required=True, type=str)
+
+    return parser
+
 
 sns.set_style('white')
 sns.set_context('poster')
@@ -276,14 +290,12 @@ def plot_pr_curve(
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Please enter path to file data and output results data from model")
-        exit(1)
+    args = build_argparser().parse_args()
 
-    with open(sys.argv[1]) as infile:     # ground_truth_boxes.json # data.json
+    with open(args.annotation) as infile:     # ground_truth_boxes.json # data.json
         gt_boxes = json.load(infile)
 
-    with open(sys.argv[2]) as infile:        # predicted_boxes.json #resultFromModel.json
+    with open(args.input) as infile:        # predicted_boxes.json #resultFromModel.json
         pred_boxes = json.load(infile)
 
     # Runs it for one IoU threshold
