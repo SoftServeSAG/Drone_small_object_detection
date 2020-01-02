@@ -1,7 +1,9 @@
 # Centernet training pipeline
 
 This is clone of original repo: https://github.com/xingyizhou/CenterNet
-Original README: https://github.com/SoftServeSAG/Drone_small_object_detection/blob/centernet/models/CenterNet/README_original.md
+
+Original README: 
+https://github.com/SoftServeSAG/Drone_small_object_detection/blob/centernet/models/CenterNet/README_original.md
 
 # Short isntruction:
 Put your annotations and images for training/validation in folder:
