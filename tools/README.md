@@ -40,3 +40,8 @@ INPUT: folder with `'MASKS', 'FRAMES', 'JSONS'` subfolders
 OUTPUT: created subfolders `'train_frames', 'train_masks', 'train_json', 'val_frames', 'val_masks', 'val_json'`
 
 
+4. **download_from_LabelBox.py** - script to get masks from LabelBox tool and create json anotation. Need two required argument:  
+--folder - "Required. Path to folder where will save masks.";  
+--input - "Required. Path to csv annotation file.";  
+
+ Warning !!! Works for only one object class.
