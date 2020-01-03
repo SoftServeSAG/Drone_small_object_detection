@@ -3,4 +3,4 @@ This project is devoted to detection of small ball with the camera mounted on th
 
 # Tools
 
-1. [mAP Evaluation Metric](tools/mAP_metrix/) - 
+1. [mAP Evaluation Metric](tools/mAP_metrix/)
