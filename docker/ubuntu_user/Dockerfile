@@ -33,4 +33,4 @@ WORKDIR /home/$DOCKER_USER
 # must run /sbin/my_init with root user
 #ENTRYPOINT [ "setuser", "user"]
 #CMD ["bash"]
-CMD ["tmux"]
+#CMD ["tmux"]
