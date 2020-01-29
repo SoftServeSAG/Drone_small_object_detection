@@ -10,3 +10,5 @@ This project is devoted to detection of small ball with the camera mounted on th
 
 3. [download_from_LabelBox.py](tools/) - script to get masks from LabelBox tool and create json anotation.
 
+4. [docker](docker/) - a tool to build a CTU framework inside the docker.
+
